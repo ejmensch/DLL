@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdlib.h>
 using namespace std;
-
+//e
 class Task {
 	friend class DNode;
 	friend class DLL;
