@@ -12,7 +12,9 @@ using namespace std;
 
 
 DNode::DNode(string t, int p, int h, int m){
-/*You need to write this!!!! */
+	task = new Task(t,p,h,m); //only one i'm unsure about is initializing task to NULL
+	next = NULL;
+	prev = NULL;
 }
 
 

@@ -30,6 +30,23 @@ using namespace std;
 	//task with a priority of 1, and insert the new task between the last task with a priority of
 	//1 and the first task with a priority of 2
 	//it also updates the total time of the list
+		//DNode *i = new DNode(n,p,h,m); //error here idk why
+		DNode *tmp;
+		/*for(tmp=first; tmp != NULL; tmp=tmp->next){
+			if(tmp == first){
+				first = n;
+				last = n;
+			}
+			else{
+				tmp=last;
+				n->prev = tmp;
+				n->next = NULL;
+				tmp->next=n;
+				last=n;
+			}
+
+		}*/
+
 	}
 
 	Task *DLL::pop() { 
@@ -42,7 +59,13 @@ using namespace std;
 	void DLL::printList() {
 		//prints out the entire list, along with the total time necessary to complete all tasks 
 		//on the list
-
+		cout<<"are you going into the loop"<<endl; //doesn't go into the loop
+		DNode *tmp;
+		for(tmp=first;tmp!=NULL;tmp=tmp->next){
+			cout<<" youre in "<<endl;
+			tmp->task->printTask();
+		}
+		cout<<" "<<endl;
 	}
 
 	void DLL::printList(int p) {
