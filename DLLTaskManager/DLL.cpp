@@ -1,5 +1,6 @@
 #include "DNode.hpp"
 #include "DLL.hpp"
+#include "Task.hpp"
 #include <iostream>
 #include <stdlib.h>
 using namespace std;
@@ -80,9 +81,15 @@ void DLL::printList() {
 	if (totmin >= 60) {
 		a = totmin%60;
 		b = totmin/60;
+		totmin = a;
+		tothrs+=b;
 	}
-	totmin = a;
-	tothrs += b;
+	if (totmin < 0) {
+		a = totmin + 60;
+		b = tothrs - 1;
+		totmin = a;
+		tothrs = b;
+	}
 	cout<<"Total Time Required: "<<tothrs<<":"<<totmin<<endl;
 	DNode *tmp;
 	for(tmp=first;tmp!=NULL;tmp=tmp->next){
@@ -96,14 +103,51 @@ void DLL::printList(int p) {
 	//to complete the tasks with a priority of p
 }
 
-void DLL::moveUp(int t) {
+void DLL::moveUp(int tn) {
 	// moves task with number tn up one in the list.
 	//If it is at the beginning of the list,
 	//it will be moved to the end of the list.
 	// NOTE: if this moves a task up before a task with a higher priority (1 is
 	// higher priority than 2 - I know the wording is a bit weird), then this
 	// changes the priority of the task being moved to that higher priority
+	DNode *list;
+	for (list=first; list->task->tasknum !=tn; list=list->next){ // Didn't add the last part yet because idk how to sort priorities yet
+	}
 
+	if(list==first){
+		DNode *Y=first;
+		DNode *Z=last;
+		first=first->next;
+		first->prev=NULL;
+		Z->next=Y;
+		Y->prev=Z;
+		Y->next=NULL;
+		last=Y;
+	}
+	else if(list==last){
+		DNode *X=list->prev->prev;
+		DNode *Y=list;
+		DNode *Z=list->prev;
+		X->next=Y;
+		Y->prev=X;
+		Y->next=Z;
+		Z->prev=Y;
+		Z->next=NULL;
+		last=Z;
+		Z=last;
+	}
+	else{
+		DNode *W=list->prev->prev;
+		DNode *X=list;
+		DNode *Y=list->prev;
+		DNode *Z=list->next;
+		W->next=X;
+		X->prev=W;
+		X->next=Y;
+		Y->prev=X;
+		Y->next=Z;
+		X->prev=Y;
+	}
 }
 
 void DLL::listDuration(int *th, int *tm,int tp) {
@@ -121,6 +165,43 @@ void DLL::moveDown(int tn) {
 	//NOTE: if this moves a task after a task with a lower priority (again, 3 is
 	//a lower priority than 2) then this changes the priority of the task being
 	//moved.
+	DNode *list;
+	for(list=first;list->task->tasknum!=tn;list=list->next){
+	}
+	if(list==first){
+		DNode *X=list->next->next;
+		DNode *Y=list;
+		DNode *Z=list->next;
+		Y->next=X;
+		X->prev=Y;
+		Y->prev=Z;
+		Z->next=Y;
+		Z->prev=NULL;
+		first=Z;
+		Z=first;
+	}
+	else if(list==last){
+		DNode *Y=first;
+		DNode *Z=last;
+		last=last->prev;
+		last->next=NULL;
+		Z->next=Y;
+		Y->prev=Z;
+		Z->prev=NULL;
+		first=Z;
+	}
+	else{
+		DNode *W=list->prev;
+		DNode *X=list->next;
+		DNode *Y=list;
+		DNode *Z=list->next->next;
+		W->next=X;
+		X->prev=W;
+		X->next=Y;
+		Y->prev=X;
+		Y->next=Z;
+		Z->prev=Y;
+	}
 
 }
 
@@ -130,6 +211,48 @@ int DLL::remove(int tn) {
 	//biggest catch with this method is making sure you test to make sure the node
 	//after and/or the node before the node you’re deleting aren’t NULL (i.e., you’re
 	//not deleting the first or last node in the list)
+	DNode *tmp;
+	int r = 0;
+	if(first->task->tasknum == tn){
+		tothrs-=first->task->hr;
+		totmin-=first->task->min;
+		tmp = first;
+		first->next->prev = NULL;
+		first = tmp->next;
+		r = 0;
+
+	}
+	else if(last->task->tasknum == tn){
+		tothrs-=last->task->hr;
+		totmin-=last->task->min;
+		tmp = last;
+		last->prev->next = NULL;
+		last = tmp->prev;
+		r = numTasks - 1;
+	}
+	else{
+		for(tmp=first;tmp->task->tasknum!=tn;tmp=tmp->next){
+			r+=1;
+			if(tmp == last){
+				return -1;
+			}
+
+		}
+		tothrs-=tmp->task->hr;
+		totmin-=tmp->task->min;
+		tmp->prev->next = tmp->next;
+		tmp->next->prev = tmp->prev;
+		tmp->next=NULL;
+		tmp->prev=NULL;
+
+
+
+	}
+	numTasks-= 1;
+	cout << "Removing: ";
+	tmp->task->printTask();
+	delete tmp;
+	return r;
 
 }
 
@@ -174,7 +297,7 @@ DLL::~DLL(){
 }
 
 /******************Optional Helper Methods********************************/
-void DLL::addTime(int h, int m) {
+void DLL::addTime(int h, int m) { //Called in
 }
 
 void DLL::removeTime(int h, int m) {
