@@ -33,20 +33,49 @@ void DLL::push(string n, int p, int h, int m) {
 	//it also updates the total time of the list
 	DNode *i = new DNode(n,p,h,m);
 	DNode *tmp;
-	for(tmp=first; tmp != NULL; tmp=tmp->next){
+	for(tmp=last; tmp != NULL && p < tmp->task->priority; tmp=tmp->prev){
+
 	}
-	if(tmp == first){
-		first = i;
-		last = i;
-	}
-	else{
-		tmp=last;
-		i->prev = tmp;
-		i->next = NULL;
-		tmp->next=i;
+	/*
+	 *
+	 * i->next = tmp->next;
+	 * i->prev = tmp;
+	 * tmp->next->prev = i ;
+	 * tmp->next = i;
+	 */
+	if (first==NULL && last ==NULL) {
+		first=i;
 		last=i;
+	} else if (tmp==last) {
+		tmp->next=i;
+		i->prev = tmp;
+		i->next=NULL;
+		last = i;
+	} else if (tmp == NULL) { // first
+		first = i;
+		i->next=tmp;
+		tmp->prev=i;
+		i->prev=NULL;
+	} else { // in the middle of the list
+		 i->next = tmp->next;
+		 i->prev = tmp;
+		 tmp->next->prev = i ;
+		 tmp->next = i;
 	}
-	tmp = NULL;
+
+//
+//	if(tmp == first){
+//		first = i;
+//		last = i;
+//	}
+//	else{
+//		tmp=last;
+//		i->prev = tmp;
+//		i->next = NULL;
+//		tmp->next=i;
+//		last=i;
+//	}
+//  tmp = NULL;
 	numTasks+=1;
 	totmin+=m;
 	tothrs+=h;
@@ -85,10 +114,15 @@ void DLL::printList() {
 		tothrs+=b;
 	}
 	if (totmin < 0) {
-		a = totmin + 60;
-		b = tothrs - 1;
+		//a = (-totmin) %60;
+		b = ((-totmin) / 60)+1;
+		a = 60*b + totmin;
+
+
+//		a = totmin + 60;
+//		b = tothrs - 1;
 		totmin = a;
-		tothrs = b;
+		tothrs-= b;
 	}
 	cout<<"Total Time Required: "<<tothrs<<":"<<totmin<<endl;
 	DNode *tmp;
@@ -124,6 +158,16 @@ void DLL::moveUp(int tn) {
 		Y->next=NULL;
 		last=Y;
 	}
+	else if (list==first->next) { //somewhere here, this part is for changing the second thing to the first thing
+		DNode *X=list;
+		DNode *Y=list->prev;
+		DNode *Z=list->next;
+		X->prev=NULL;
+		X->next=Y;
+		Y->prev=X;
+		Y->next=Z;
+		Z->prev=Y;
+	}
 	else if(list==last){
 		DNode *X=list->prev->prev;
 		DNode *Y=list;
@@ -146,7 +190,10 @@ void DLL::moveUp(int tn) {
 		X->next=Y;
 		Y->prev=X;
 		Y->next=Z;
-		X->prev=Y;
+		Z->prev=Y;
+	}
+	if(list->task->priority > list->next->task->priority){
+		list->task->priority -= 1;
 	}
 }
 
@@ -202,7 +249,9 @@ void DLL::moveDown(int tn) {
 		Y->next=Z;
 		Z->prev=Y;
 	}
-
+	if (list->task->priority < list->next->task->priority) {
+		list->task->priority += 1;
+	}
 }
 
 int DLL::remove(int tn) {
