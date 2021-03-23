@@ -326,6 +326,8 @@ void DLL::changePriority(int tn, int newp) {
 		task5, 2, 1:10
 		task7, 3, 2:54
 	 */
+	/*DNode *tmp;
+	tmp->task->priority = newp;*/
 }
 
 DLL::~DLL(){
