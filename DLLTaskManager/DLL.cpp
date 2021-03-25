@@ -371,22 +371,49 @@ void DLL::changePriority(int tn, int newp) {
 		task7, 3, 2:54
 	 */
 	DNode *tmp;
+	DNode *index; // used for attempt 2
+	index = tmp->next; //used for while
 	for(tmp=first;tmp->task->tasknum!=tn;tmp=tmp->next){
 	}
 	tmp->task->priority = newp;
-	// The code below prevents the priority to change, so definitely keeping it out for now
-	/*if (tmp->task->priority > tmp->prev->task->priority) {
-		DNode *W=tmp->prev->prev;
-		DNode *X=tmp;
-		DNode *Y=tmp->prev;
-		DNode *Z=tmp->next;
-		W->next=X;
-		X->prev=W;
-		X->next=Y;
-		Y->prev=X;
-		Y->next=Z;
-		Z->prev=Y;
-	}*/
+
+	//could be a while loop
+	//this for loop breaks it,but with just the while loop it still changes priority just doesn't sort, but i feel like i'm getting closer
+	//for (tmp = first; tmp->next != NULL; tmp = tmp->next) { //don't know if we need the for loop to iterate if we use a while ; but then again I think we do
+		while (tmp->next->task->priority < tmp->task->priority) {
+			tmp->next=index->next;
+			tmp->prev=index;
+			tmp->prev->next=index;
+			tmp->next->prev=tmp->prev;
+		}
+	//}
+// 2  trying sort algorithm ; i think a pointer is getting lost here
+//	for(tmp=first;tmp->next!=NULL; tmp= tmp->next){
+//		for(index=tmp->next;index != NULL; index = index->next){
+//			if(tmp->task->priority > index->task->priority){
+//				index->prev=tmp->prev;
+//				index->next=tmp;
+//				tmp->next = index->next;
+//				tmp->prev = index;
+//			}
+//		}
+//	}
+
+// tried to iterate through and still broke code
+//	for (tmp = first; tmp != NULL; tmp = tmp->next) {
+//		if (tmp->task->priority > tmp->prev->task->priority) {
+//			DNode *W = tmp->prev->prev;
+//			DNode *X = tmp;
+//			DNode *Y = tmp->prev;
+//			DNode *Z = tmp->next;
+//			W->next = X;
+//			X->prev = W;
+//			X->next = Y;
+//			Y->prev = X;
+//			Y->next = Z;
+//			Z->prev = Y;
+//		}
+//	}
 }
 
 DLL::~DLL(){
