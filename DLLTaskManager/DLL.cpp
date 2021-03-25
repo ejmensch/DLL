@@ -369,6 +369,12 @@ void DLL::changePriority(int tn, int newp) {
 	remove(tn);
 	push(taskcopy,newp,copyhrs,copymins);
 //iterate again w for if
+	for (tmp = first; tmp != NULL; tmp = tmp->next){
+		if(tmp->task->task == taskcopy && tmp->task->hr == copyhrs && tmp->task->min == copymins ){
+			tmp->task->tasknum = tn;
+
+		}
+	}
 }
 
 DLL::~DLL(){
