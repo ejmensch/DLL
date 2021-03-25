@@ -370,23 +370,47 @@ void DLL::changePriority(int tn, int newp) {
 		task5, 2, 1:10
 		task7, 3, 2:54
 	 */
+	//DNode *i;
 	DNode *tmp;
-	DNode *index; // used for attempt 2
-	index = tmp->next; //used for while
-	for(tmp=first;tmp->task->tasknum!=tn;tmp=tmp->next){
-	}
-	tmp->task->priority = newp;
-
-	//could be a while loop
-	//this for loop breaks it,but with just the while loop it still changes priority just doesn't sort, but i feel like i'm getting closer
-	//for (tmp = first; tmp->next != NULL; tmp = tmp->next) { //don't know if we need the for loop to iterate if we use a while ; but then again I think we do
-		while (tmp->next->task->priority < tmp->task->priority) {
-			tmp->next=index->next;
-			tmp->prev=index;
-			tmp->prev->next=index;
-			tmp->next->prev=tmp->prev;
+	//DNode *index; // used for attempt 2 & while
+	string taskcopy;
+	int copyhrs;
+	int copymins;
+	Task *newtask;
+	for (tmp = first; tmp != NULL; tmp = tmp->next) {
+		if (tmp->task->tasknum == tn) {
+			taskcopy = tmp->task->task;
+			copyhrs = tmp->task->hr;
+			copymins = tmp->task->min;
+//			newtask = new DNode(tmp->task->task, newp, tmp->task->hr,
+//					tmp->task->min);
+//			i = new DNode(tmp->task->task, newp, tmp->task->hr, tmp->task->min);
+			break;
 		}
-	//}
+
+	}
+	remove(tn);
+	push(taskcopy,newp,copyhrs,copymins);
+//iterate again w for if
+
+
+
+//	index = tmp->next; //used for while
+//	for(tmp=first;tmp->task->tasknum!=tn;tmp=tmp->next){
+//	}
+//	tmp->task->priority = newp;
+//
+//	//could be a while loop
+//	//this for loop breaks it,but with just the while loop it still changes priority just doesn't sort, but i feel like i'm getting closer
+//	for (tmp = first; tmp->next != NULL; tmp = tmp->next) { //don't know if we need the for loop to iterate if we use a while ; but then again I think we do
+//		while (tmp->next->task->priority < tmp->task->priority) {
+//			tmp->task->printTask();
+//			tmp->next=index->next;
+//			tmp->prev=index;
+//			tmp->prev->next=index;
+//			tmp->next->prev=tmp->prev;
+//		}
+//	}
 // 2  trying sort algorithm ; i think a pointer is getting lost here
 //	for(tmp=first;tmp->next!=NULL; tmp= tmp->next){
 //		for(index=tmp->next;index != NULL; index = index->next){
