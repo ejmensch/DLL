@@ -35,13 +35,7 @@ void DLL::push(string n, int p, int h, int m) {
 	DNode *tmp;
 	for(tmp=last; tmp != NULL && p < tmp->task->priority; tmp=tmp->prev){
 	}
-	/*
-	 *
-	 * i->next = tmp->next;
-	 * i->prev = tmp;
-	 * tmp->next->prev = i ;
-	 * tmp->next = i;
-	 */
+
 	if (first==NULL && last ==NULL) {
 		first=i;
 		last=i;
@@ -64,20 +58,6 @@ void DLL::push(string n, int p, int h, int m) {
 		tmp->next->prev = i ;
 		tmp->next = i;
 	}
-
-	//
-	//	if(tmp == first){
-	//		first = i;
-	//		last = i;
-	//	}
-	//	else{
-	//		tmp=last;
-	//		i->prev = tmp;
-	//		i->next = NULL;
-	//		tmp->next=i;
-	//		last=i;
-	//	}
-	//  tmp = NULL;
 	numTasks+=1;
 	totmin+=m;
 	tothrs+=h;
@@ -376,15 +356,12 @@ void DLL::changePriority(int tn, int newp) {
 	string taskcopy;
 	int copyhrs;
 	int copymins;
-	Task *newtask;
+	//Task *newtask;
 	for (tmp = first; tmp != NULL; tmp = tmp->next) {
 		if (tmp->task->tasknum == tn) {
 			taskcopy = tmp->task->task;
 			copyhrs = tmp->task->hr;
 			copymins = tmp->task->min;
-//			newtask = new DNode(tmp->task->task, newp, tmp->task->hr,
-//					tmp->task->min);
-//			i = new DNode(tmp->task->task, newp, tmp->task->hr, tmp->task->min);
 			break;
 		}
 
@@ -392,52 +369,6 @@ void DLL::changePriority(int tn, int newp) {
 	remove(tn);
 	push(taskcopy,newp,copyhrs,copymins);
 //iterate again w for if
-
-
-
-//	index = tmp->next; //used for while
-//	for(tmp=first;tmp->task->tasknum!=tn;tmp=tmp->next){
-//	}
-//	tmp->task->priority = newp;
-//
-//	//could be a while loop
-//	//this for loop breaks it,but with just the while loop it still changes priority just doesn't sort, but i feel like i'm getting closer
-//	for (tmp = first; tmp->next != NULL; tmp = tmp->next) { //don't know if we need the for loop to iterate if we use a while ; but then again I think we do
-//		while (tmp->next->task->priority < tmp->task->priority) {
-//			tmp->task->printTask();
-//			tmp->next=index->next;
-//			tmp->prev=index;
-//			tmp->prev->next=index;
-//			tmp->next->prev=tmp->prev;
-//		}
-//	}
-// 2  trying sort algorithm ; i think a pointer is getting lost here
-//	for(tmp=first;tmp->next!=NULL; tmp= tmp->next){
-//		for(index=tmp->next;index != NULL; index = index->next){
-//			if(tmp->task->priority > index->task->priority){
-//				index->prev=tmp->prev;
-//				index->next=tmp;
-//				tmp->next = index->next;
-//				tmp->prev = index;
-//			}
-//		}
-//	}
-
-// tried to iterate through and still broke code
-//	for (tmp = first; tmp != NULL; tmp = tmp->next) {
-//		if (tmp->task->priority > tmp->prev->task->priority) {
-//			DNode *W = tmp->prev->prev;
-//			DNode *X = tmp;
-//			DNode *Y = tmp->prev;
-//			DNode *Z = tmp->next;
-//			W->next = X;
-//			X->prev = W;
-//			X->next = Y;
-//			Y->prev = X;
-//			Y->next = Z;
-//			Z->prev = Y;
-//		}
-//	}
 }
 
 DLL::~DLL(){
