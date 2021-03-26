@@ -106,8 +106,6 @@ void DLL::printList() {
 		totmin = a;
 		tothrs-= b;
 	}
-	//cout<<first->task->tasknum<<" is first"<<endl; //Test to see if first node is detected correctly
-	//cout<<last->task->tasknum<<" is last"<<endl; //Test to see if last node is detected correctly
 	cout<<"Total Time Required: "<<tothrs<<":"<<totmin<<endl;
 	DNode *tmp;
 	for(tmp=first;tmp!=NULL;tmp=tmp->next){
@@ -350,13 +348,10 @@ void DLL::changePriority(int tn, int newp) {
 		task5, 2, 1:10
 		task7, 3, 2:54
 	 */
-	//DNode *i;
 	DNode *tmp;
-	//DNode *index; // used for attempt 2 & while
 	string taskcopy;
 	int copyhrs;
 	int copymins;
-	//Task *newtask;
 	for (tmp = first; tmp != NULL; tmp = tmp->next) {
 		if (tmp->task->tasknum == tn) {
 			taskcopy = tmp->task->task;
@@ -368,7 +363,6 @@ void DLL::changePriority(int tn, int newp) {
 	}
 	remove(tn);
 	push(taskcopy,newp,copyhrs,copymins);
-//iterate again w for if
 	for (tmp = first; tmp != NULL; tmp = tmp->next){
 		if(tmp->task->task == taskcopy && tmp->task->hr == copyhrs && tmp->task->min == copymins ){
 			tmp->task->tasknum = tn;
